@@ -1,0 +1,101 @@
+object MainForm: TMainForm
+  Left = 490
+  Top = 166
+  Caption = 'MainForm'
+  ClientHeight = 735
+  ClientWidth = 1070
+  Color = clBtnFace
+  Font.Charset = TURKISH_CHARSET
+  Font.Color = clWindowText
+  Font.Height = -16
+  Font.Name = 'Calibri'
+  Font.Style = []
+  Position = poDesigned
+  OnCreate = FormCreate
+  TextHeight = 19
+  object DBGrid: TDBGrid
+    Left = 624
+    Top = 32
+    Width = 433
+    Height = 530
+    Color = clWhite
+    DataSource = MSDataSource
+    FixedColor = clTeal
+    GradientStartColor = clBackground
+    ReadOnly = True
+    TabOrder = 0
+    TitleFont.Charset = TURKISH_CHARSET
+    TitleFont.Color = clWindowText
+    TitleFont.Height = -16
+    TitleFont.Name = 'Calibri'
+    TitleFont.Style = []
+    OnDblClick = DBGridDblClick
+  end
+  object btnExecute: TButton
+    Left = 302
+    Top = 570
+    Width = 75
+    Height = 25
+    Caption = 'Execute'
+    TabOrder = 1
+    OnClick = btnExecuteClick
+  end
+  object MemoQueryText: TMemo
+    Left = 8
+    Top = 8
+    Width = 369
+    Height = 554
+    TabOrder = 2
+  end
+  object ComboBox1: TComboBox
+    Left = 151
+    Top = 568
+    Width = 145
+    Height = 27
+    TabOrder = 3
+    Text = 'ComboBox1'
+  end
+  object TabSet1: TTabSet
+    Left = 320
+    Top = -24
+    Width = 185
+    Height = 249
+    Font.Charset = DEFAULT_CHARSET
+    Font.Color = clWindowText
+    Font.Height = -12
+    Font.Name = 'Segoe UI'
+    Font.Style = []
+  end
+  object DockTabSet1: TDockTabSet
+    Left = 496
+    Top = 56
+    Width = 185
+    Height = 225
+    Font.Charset = DEFAULT_CHARSET
+    Font.Color = clWindowText
+    Font.Height = -12
+    Font.Name = 'Segoe UI'
+    Font.Style = []
+  end
+  object PageControl: TPageControl
+    Left = 383
+    Top = 353
+    Width = 289
+    Height = 193
+    TabOrder = 6
+  end
+  object MSConnection: TMSConnection
+    Left = 920
+    Top = 688
+  end
+  object MSQuery: TMSQuery
+    Connection = MSConnection
+    Left = 976
+    Top = 688
+  end
+  object MSDataSource: TMSDataSource
+    DataSet = MSQuery
+    Left = 1024
+    Top = 688
+  end
+end

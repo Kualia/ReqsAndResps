@@ -1,0 +1,26 @@
+unit DataTab;
+
+interface
+
+uses
+  System.Math,
+  Winapi.Windows, Winapi.Messages, System.SysUtils, System.Variants, System.Classes, Vcl.Graphics,
+  Vcl.Controls, Vcl.Forms, Vcl.Dialogs, Data.DB, Vcl.Grids, Vcl.DBGrids,
+  DBAccess, MSAccess, MemDS, Vcl.StdCtrls, Vcl.ExtCtrls, Vcl.ComCtrls,
+  Vcl.DockTabSet, Vcl.Tabs;
+
+
+type
+  TDataTab = class(TTabSheet);
+
+
+
+
+
+implementation
+
+
+
+
+
+end.

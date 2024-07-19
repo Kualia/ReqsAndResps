@@ -1,0 +1,11 @@
+unit DataTab;
+
+interface
+
+type
+  TDataTab = class(TObject);
+
+
+implementation
+
+end.

@@ -1,0 +1,16 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<BorlandProject>
+	<Transactions>
+    <Transaction>1899.12.30 00:00:00.000.491,=C:\Users\deniz\OneDrive\Belgeler\Embarcadero\Studio\Projects\Unit4.pas</Transaction>
+    <Transaction>1899.12.30 00:00:00.000.771,C:\Users\deniz\OneDrive\Belgeler\Embarcadero\Studio\Projects\Project4.dproj=C:\Users\deniz\OneDrive\Belgeler\Embarcadero\Studio\Projects\ReqRep.dproj</Transaction>
+    <Transaction>1899.12.30 00:00:00.000.713,C:\Users\deniz\OneDrive\Belgeler\Embarcadero\Studio\Projects\ReqRep.dproj=C:\Users\deniz\OneDrive\Belgeler\Delphi Projects\ReqRep\Project\ReqRep.dproj</Transaction>
+    <Transaction>1899.12.30 00:00:00.000.480,C:\Users\deniz\OneDrive\Belgeler\Embarcadero\Studio\Projects\Unit4.dfm=C:\Users\deniz\OneDrive\Belgeler\Embarcadero\Studio\Projects\Main.dfm</Transaction>
+    <Transaction>1899.12.30 00:00:00.000.448,C:\Users\deniz\OneDrive\Belgeler\Embarcadero\Studio\Projects\Main.pas=C:\Users\deniz\OneDrive\Belgeler\Delphi Projects\ReqRep\Main.pas</Transaction>
+    <Transaction>1899.12.30 00:00:00.000.730,=C:\Users\deniz\OneDrive\Belgeler\Embarcadero\Studio\Projects\Unit4.pas</Transaction>
+    <Transaction>1899.12.30 00:00:00.000.448,C:\Users\deniz\OneDrive\Belgeler\Embarcadero\Studio\Projects\Main.dfm=C:\Users\deniz\OneDrive\Belgeler\Delphi Projects\ReqRep\Main.dfm</Transaction>
+    <Transaction>1899.12.30 00:00:00.000.480,C:\Users\deniz\OneDrive\Belgeler\Embarcadero\Studio\Projects\Unit4.pas=C:\Users\deniz\OneDrive\Belgeler\Embarcadero\Studio\Projects\Main.pas</Transaction>
+    <Transaction>1899.12.30 00:00:00.000.074,=C:\Users\deniz\OneDrive\Belgeler\Embarcadero\Studio\Projects\Unit4.pas</Transaction>
+    <Transaction>1899.12.30 00:00:00.000.485,=C:\Users\deniz\OneDrive\Belgeler\Embarcadero\Studio\Projects\Unit4.pas</Transaction>
+    <Transaction>1899.12.30 00:00:00.000.444,=C:\Users\deniz\OneDrive\Belgeler\Embarcadero\Studio\Projects\Unit4.pas</Transaction>
+  </Transactions>
+</BorlandProject>
