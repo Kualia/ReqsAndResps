@@ -1,25 +1,25 @@
 ﻿[Closed Files]
-File_0=TSourceModule,'c:\program files (x86)\embarcadero\studio\22.0\source\rtl\common\System.Classes.pas',0,1,4045,43,4061,0,0,,
-File_1=TSourceModule,'c:\program files (x86)\embarcadero\studio\22.0\SOURCE\RTL\SYS\System.pas',0,1,18394,1,18378,0,0,,
-File_2=TSourceModule,'c:\program files (x86)\embarcadero\studio\22.0\source\data\Data.DB.pas',0,1,12654,47,12671,0,0,,
-File_3=TSourceModule,'C:\Users\deniz\OneDrive\Belgeler\Delphi Projects\SDAC deneme\main.pas',0,1,38,27,57,0,0,,
-File_4=TSourceModule,'c:\program files (x86)\embarcadero\studio\22.0\SOURCE\VCL\Vcl.Forms.pas',0,1,4146,34,4161,0,0,{{1990,4}
-File_5=TSourceModule,'C:\Users\deniz\OneDrive\Masaüstü\Bomberman\Game.pas',0,1,159,41,38,0,0,{{253,58}
-File_6=TSourceModule,'C:\Users\deniz\OneDrive\Masaüstü\Bomberman\Agent.pas',0,1,40,1,43,0,0,,
-File_7=TSourceModule,'C:\Users\deniz\OneDrive\Masaüstü\Bomberman\Character.pas',0,1,37,50,90,0,0,,
-File_8=TSourceModule,'C:\Users\deniz\OneDrive\Masaüstü\Bomberman\Monster.pas',0,1,1,76,35,0,0,,
-File_9=TSourceModule,'C:\Users\deniz\OneDrive\Masaüstü\Bomberman\Screen.pas',0,1,49,24,91,0,0,,
-File_10=TSourceModule,'C:\Users\deniz\OneDrive\Masaüstü\Bomberman\Main.pas',0,1,42,1,42,0,0,,
-File_11=TSourceModule,'C:\Users\deniz\OneDrive\Masaüstü\Bomberman\Dynamic2DArr.pas',0,1,1,94,23,0,0,,
-File_12=TSourceModule,'C:\Users\deniz\OneDrive\Masaüstü\Bomberman\Tiles.pas',0,1,7,11,42,0,0,,
-File_13=TSourceModule,'C:\Users\deniz\OneDrive\Masaüstü\Bomberman\Enums.pas',0,1,1,32,26,0,0,,
-File_14=TSourceModule,'C:\Users\deniz\OneDrive\Masaüstü\Bomberman\Bombs.pas',0,1,68,27,86,0,0,,
+File_0=TSourceModule,'c:\program files (x86)\embarcadero\studio\22.0\SOURCE\RTL\SYS\System.pas',0,1,18394,1,18378,0,0,,
+File_1=TSourceModule,'c:\program files (x86)\embarcadero\studio\22.0\source\data\Data.DB.pas',0,1,12654,47,12671,0,0,,
+File_2=TSourceModule,'C:\Users\deniz\OneDrive\Belgeler\Delphi Projects\SDAC deneme\main.pas',0,1,38,27,57,0,0,,
+File_3=TSourceModule,'c:\program files (x86)\embarcadero\studio\22.0\SOURCE\VCL\Vcl.Forms.pas',0,1,4146,34,4161,0,0,{{1990,4}
+File_4=TSourceModule,'C:\Users\deniz\OneDrive\Masaüstü\Bomberman\Game.pas',0,1,159,41,38,0,0,{{253,58}
+File_5=TSourceModule,'C:\Users\deniz\OneDrive\Masaüstü\Bomberman\Agent.pas',0,1,40,1,43,0,0,,
+File_6=TSourceModule,'C:\Users\deniz\OneDrive\Masaüstü\Bomberman\Character.pas',0,1,37,50,90,0,0,,
+File_7=TSourceModule,'C:\Users\deniz\OneDrive\Masaüstü\Bomberman\Monster.pas',0,1,1,76,35,0,0,,
+File_8=TSourceModule,'C:\Users\deniz\OneDrive\Masaüstü\Bomberman\Screen.pas',0,1,49,24,91,0,0,,
+File_9=TSourceModule,'C:\Users\deniz\OneDrive\Masaüstü\Bomberman\Main.pas',0,1,42,1,42,0,0,,
+File_10=TSourceModule,'C:\Users\deniz\OneDrive\Masaüstü\Bomberman\Dynamic2DArr.pas',0,1,1,94,23,0,0,,
+File_11=TSourceModule,'C:\Users\deniz\OneDrive\Masaüstü\Bomberman\Tiles.pas',0,1,7,11,42,0,0,,
+File_12=TSourceModule,'C:\Users\deniz\OneDrive\Masaüstü\Bomberman\Enums.pas',0,1,1,32,26,0,0,,
+File_13=TSourceModule,'C:\Users\deniz\OneDrive\Masaüstü\Bomberman\Bombs.pas',0,1,68,27,86,0,0,,
 
 [Modules]
 Module0=C:\Users\deniz\OneDrive\Belgeler\Delphi Projects\ReqResp\DBConnectionForm.pas
 Module1=C:\Users\deniz\OneDrive\Belgeler\Delphi Projects\ReqResp\Main.pas
-Module2=C:\Users\deniz\OneDrive\Belgeler\Delphi Projects\ReqResp\DataTab.pas
-Count=3
+Module2=c:\program files (x86)\embarcadero\studio\22.0\source\rtl\common\System.Classes.pas
+Module3=C:\Users\deniz\OneDrive\Belgeler\Delphi Projects\ReqResp\DataTab.pas
+Count=4
 EditWindowCount=1
 
 [C:\Users\deniz\OneDrive\Belgeler\Delphi Projects\ReqResp\DBConnectionForm.pas]
@@ -28,15 +28,19 @@ ModuleType=TSourceModule
 [C:\Users\deniz\OneDrive\Belgeler\Delphi Projects\ReqResp\Main.pas]
 ModuleType=TSourceModule
 
+[c:\program files (x86)\embarcadero\studio\22.0\source\rtl\common\System.Classes.pas]
+ModuleType=TSourceModule
+
 [C:\Users\deniz\OneDrive\Belgeler\Delphi Projects\ReqResp\DataTab.pas]
 ModuleType=TSourceModule
 
 [EditWindow0]
-ViewCount=3
+ViewCount=4
 CurrentEditView=C:\Users\deniz\OneDrive\Belgeler\Delphi Projects\ReqResp\DBConnectionForm.pas
 View0=0
 View1=1
 View2=2
+View3=3
 PercentageSizes=1
 Create=1
 Visible=1
@@ -69,9 +73,9 @@ BottomMiddelPanelData=0000080001020200000009000000446F636B5369746530100000004772
 [View0]
 CustomEditViewType=TEditView
 Module=C:\Users\deniz\OneDrive\Belgeler\Delphi Projects\ReqResp\Main.pas
-CursorX=5
-CursorY=34
-TopLine=16
+CursorX=51
+CursorY=69
+TopLine=52
 LeftCol=1
 Elisions=
 Bookmarks=
@@ -79,21 +83,32 @@ EditViewName=C:\Users\deniz\OneDrive\Belgeler\Delphi Projects\ReqResp\Main.pas
 
 [View1]
 CustomEditViewType=TEditView
+Module=c:\program files (x86)\embarcadero\studio\22.0\source\rtl\common\System.Classes.pas
+CursorX=1
+CursorY=4059
+TopLine=4024
+LeftCol=1
+Elisions=
+Bookmarks=
+EditViewName=c:\program files (x86)\embarcadero\studio\22.0\source\rtl\common\System.Classes.pas
+
+[View2]
+CustomEditViewType=TEditView
 Module=C:\Users\deniz\OneDrive\Belgeler\Delphi Projects\ReqResp\DBConnectionForm.pas
-CursorX=40
-CursorY=48
-TopLine=31
+CursorX=50
+CursorY=72
+TopLine=1
 LeftCol=1
 Elisions=
 Bookmarks=
 EditViewName=C:\Users\deniz\OneDrive\Belgeler\Delphi Projects\ReqResp\DBConnectionForm.pas
 
-[View2]
+[View3]
 CustomEditViewType=TEditView
 Module=C:\Users\deniz\OneDrive\Belgeler\Delphi Projects\ReqResp\DataTab.pas
 CursorX=65
 CursorY=71
-TopLine=52
+TopLine=106
 LeftCol=1
 Elisions=
 Bookmarks=
@@ -124,12 +139,7 @@ Dockable=1
 StayOnTop=0
 
 [Breakpoints]
-Count=5
-Breakpoint0='C:\Users\deniz\OneDrive\Belgeler\Delphi Projects\ReqResp\Main.pas',65,'',0,1,'',1,0,0,'',1,'','','',0,''
-Breakpoint1='C:\Users\deniz\OneDrive\Belgeler\Delphi Projects\ReqResp\Main.pas',66,'',0,1,'',1,0,0,'',1,'','','',0,''
-Breakpoint2='C:\Users\deniz\OneDrive\Belgeler\Delphi Projects\ReqResp\Main.pas',67,'',0,1,'',1,0,0,'',1,'','','',0,''
-Breakpoint3='C:\Users\deniz\OneDrive\Belgeler\Delphi Projects\ReqResp\Main.pas',70,'',0,1,'',1,0,0,'',1,'','','',0,''
-Breakpoint4='C:\Users\deniz\OneDrive\Belgeler\Delphi Projects\ReqResp\Main.pas',68,'',0,1,'',1,0,0,'',1,'','','',0,''
+Count=0
 
 [EmbarcaderoWin32Debugger_AddressBreakpoints]
 Count=0
@@ -232,7 +242,12 @@ TBDockHeight=9010
 LRDockWidth=1896
 Dockable=1
 StayOnTop=0
-SplitPos=127
+SplitPos=111
+
+[PropInspDesignerSelection]
+ArrangeBy=Name
+SelectedItem=Action,
+ExpandedItems=Anchors=0,BorderIcons=0,Constraints=0
 
 [frmDesignPreview]
 PercentageSizes=1

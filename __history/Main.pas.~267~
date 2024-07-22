@@ -29,8 +29,10 @@ type
     procedure FormCreate(Sender: TObject);
     procedure btnExecuteClick(Sender: TObject);
     procedure Button1Click(Sender: TObject);
+    procedure PageControlMouseDown(Sender: TObject; Button: TMouseButton;
+      Shift: TShiftState; X, Y: Integer);
   private
-    QueryCount              :Integer;
+    QueryCount          :Integer;
     MSConnection        :TMSConnection;
     DBConnectionForm    :TFormDBConnect;
     SqlFolderPath       :string;
@@ -64,8 +66,7 @@ begin
     NewTab := TDataTab.Create(MemoQueryText.Lines.Text, Format('SQL-%d', [QueryCount]),
                                             PageControl, MSConnection, CBoxDatabases.Text);
     PageControl.ActivePage := NewTab;
-//    if QueryCount = 1 then PageControl.RemoveComponent(PageControl.Create);
-
+//    if QueryCount = 1 then PageControl.Pages[0].Free;
 end;
 
 
@@ -120,6 +121,17 @@ begin
 
   if not FileExists(ServerSavePath) then
     TFile.WriteAllText(ServerSavePath, '{}');
+end;
+
+procedure TMainForm.PageControlMouseDown(Sender: TObject; Button: TMouseButton;
+  Shift: TShiftState; X, Y: Integer);
+var
+  pageIndex :Integer;
+begin
+  if Button <> mbMiddle then Exit;
+
+  pageIndex := PageControl.IndexOfTabAt(X, Y);
+  PageControl.Pages[pageIndex].Free;
 end;
 
 end.

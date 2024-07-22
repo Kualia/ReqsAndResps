@@ -25,12 +25,15 @@ type
     CBSave: TCheckBox;
     Label7: TLabel;
     EdSaveName: TEdit;
+    BtnDeleteServer: TButton;
     procedure BtnConnectClick(Sender: TObject);
     procedure FormCreate(Sender: TObject);
     procedure CBoxServersChange(Sender: TObject);
+    procedure BtnDeleteServerClick(Sender: TObject);
   private
     fServers  :TJSONObject;
     procedure SaveServer();
+    procedure RemoveServer();
     procedure GetServers();
 
   public
@@ -69,11 +72,16 @@ begin
 
 end;
 
+procedure TFormDBConnect.BtnDeleteServerClick(Sender: TObject);
+begin
+  if CBoxServers.ItemIndex < 0 then Exit;
+  RemoveServer();
+end;
+
 procedure TFormDBConnect.CBoxServersChange(Sender: TObject);
 var
   server :TJSONObject;
 begin
-  // onemli 789
   server := fServers.GetValue<TJSONObject>(CBoxServers.Text);
 
   EdServer.Text   := Server.GetValue<String>('Server');
@@ -90,9 +98,9 @@ end;
 procedure TFormDBConnect.GetServers();
 var
  pair :TJSONPair;
- i :Integer;
+ i    :Integer;
  begin
-  fServers := TJSONObject.ParseJSONValue(TFile.ReadAllText(ServerSavePath)) as TJSONObject;
+  fServers := TJSONObject.ParseJSONValue(TFile.ReadAllText(ServerSavePath, TEncoding.UTF8)) as TJSONObject;
   CBoxServers.Clear;
 
   for i:= 0 to fServers.Count-1 do
@@ -127,6 +135,22 @@ begin
 
 end;
 
+procedure TFormDBConnect.RemoveServer();
+var
+  i :Integer;
+begin
+  fServers.RemovePair(CBoxServers.Text);
+  TFile.WriteAllText(ServerSavePath, fServers.Format(2));
 
+
+  for i := CBoxservers.Items.Count - 1 downto 0 do
+  begin
+    if CBoxservers.Items[i] = CBoxServers.Text then
+    begin
+      CBoxservers.Items.Delete(i);
+      Exit;
+    end;
+  end;
+end;
 
 end.

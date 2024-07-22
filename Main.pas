@@ -32,7 +32,7 @@ type
     procedure PageControlMouseDown(Sender: TObject; Button: TMouseButton;
       Shift: TShiftState; X, Y: Integer);
   private
-    QueryCount              :Integer;
+    QueryCount          :Integer;
     MSConnection        :TMSConnection;
     DBConnectionForm    :TFormDBConnect;
     SqlFolderPath       :string;
@@ -66,7 +66,6 @@ begin
     NewTab := TDataTab.Create(MemoQueryText.Lines.Text, Format('SQL-%d', [QueryCount]),
                                             PageControl, MSConnection, CBoxDatabases.Text);
     PageControl.ActivePage := NewTab;
-//    if QueryCount = 1 then PageControl.Pages[0].Free;
 end;
 
 

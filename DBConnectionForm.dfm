@@ -3,8 +3,8 @@ object FormDBConnect: TFormDBConnect
   Top = 374
   BorderStyle = bsSingle
   Caption = 'DBConnect'
-  ClientHeight = 297
-  ClientWidth = 275
+  ClientHeight = 302
+  ClientWidth = 361
   Color = clBtnFace
   Font.Charset = DEFAULT_CHARSET
   Font.Color = clWindowText
@@ -22,8 +22,8 @@ object FormDBConnect: TFormDBConnect
     Caption = 'Server'
   end
   object Label2: TLabel
-    Left = 135
-    Top = 16
+    Left = 223
+    Top = 14
     Width = 22
     Height = 15
     Caption = 'Port'
@@ -36,8 +36,8 @@ object FormDBConnect: TFormDBConnect
     Caption = 'User'
   end
   object Label4: TLabel
-    Left = 135
-    Top = 64
+    Left = 223
+    Top = 62
     Width = 50
     Height = 15
     Caption = 'Password'
@@ -66,15 +66,15 @@ object FormDBConnect: TFormDBConnect
   object EdServer: TEdit
     Left = 8
     Top = 35
-    Width = 121
+    Width = 185
     Height = 23
     ImeName = 'Turkish Q'
     TabOrder = 0
     Text = 'localhost'
   end
   object EdPort: TEdit
-    Left = 135
-    Top = 37
+    Left = 223
+    Top = 35
     Width = 121
     Height = 23
     ImeName = 'Turkish Q'
@@ -84,31 +84,32 @@ object FormDBConnect: TFormDBConnect
   object EdUser: TEdit
     Left = 8
     Top = 85
-    Width = 121
+    Width = 185
     Height = 23
     TabOrder = 2
     Text = 'Sa'
   end
   object EdPassword: TEdit
-    Left = 135
-    Top = 85
+    Left = 223
+    Top = 83
     Width = 121
     Height = 23
     Hint = 'Password'
+    PasswordChar = #8226
     TabOrder = 3
   end
   object CBoxServers: TComboBox
     Left = 8
     Top = 266
-    Width = 145
+    Width = 213
     Height = 23
     Style = csDropDownList
     TabOrder = 4
     OnChange = CBoxServersChange
   end
   object BtnConnect: TButton
-    Left = 181
-    Top = 262
+    Left = 269
+    Top = 264
     Width = 75
     Height = 25
     Caption = 'Connect'
@@ -118,7 +119,7 @@ object FormDBConnect: TFormDBConnect
   object CbDatabase: TComboBox
     Left = 8
     Top = 133
-    Width = 121
+    Width = 185
     Height = 23
     TabOrder = 6
     Text = 'master'
@@ -138,5 +139,14 @@ object FormDBConnect: TFormDBConnect
     Height = 23
     TabOrder = 8
     TextHint = 'ServerName'
+  end
+  object BtnDeleteServer: TButton
+    Left = 227
+    Top = 266
+    Width = 22
+    Height = 23
+    Caption = 'X'
+    TabOrder = 9
+    OnClick = BtnDeleteServerClick
   end
 end

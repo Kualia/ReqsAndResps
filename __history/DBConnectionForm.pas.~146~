@@ -25,12 +25,15 @@ type
     CBSave: TCheckBox;
     Label7: TLabel;
     EdSaveName: TEdit;
+    BtnDeleteServer: TButton;
     procedure BtnConnectClick(Sender: TObject);
     procedure FormCreate(Sender: TObject);
     procedure CBoxServersChange(Sender: TObject);
+    procedure BtnDeleteServerClick(Sender: TObject);
   private
     fServers  :TJSONObject;
     procedure SaveServer();
+    procedure RemoveServer();
     procedure GetServers();
 
   public
@@ -58,8 +61,7 @@ begin
 
   try
     Connection.Connected := True;
-    if CBSave.Enabled then SaveServer();
-
+    if CBSave.Checked then SaveServer();
     self.Close;
   except
     on E: Exception do begin
@@ -68,6 +70,11 @@ begin
     end;
   end;
 
+end;
+
+procedure TFormDBConnect.BtnDeleteServerClick(Sender: TObject);
+begin
+  if CBoxServers.ItemIndex < 0 then Exit;
 end;
 
 procedure TFormDBConnect.CBoxServersChange(Sender: TObject);
@@ -126,6 +133,13 @@ begin
     fServers.Free;
   end;
 
+end;
+
+procedure TFormDBConnect.RemoveServer();
+begin
+  fServers.RemovePair(CBoxServers.Text);
+  TFile.WriteAllText(ServerSavePath, fServers.Format(2));
+  CBoxservers.FindComponent(cBoxServers.Text).Destroy();
 end;
 
 
