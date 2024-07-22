@@ -16,7 +16,9 @@ type
     fDataSource   :TMSDataSource;
 
     fPanel        :TPanel;
+    fPanel2       :TPanel;
     fDBGrid       :TDBGrid;
+    fMemoMessage  :TMemo;
     fMemoQuery    :TMemo;
     fCBoxReadOnly :TCheckBox;
     procedure SetGridReadonlyProp(Sender :TObject = nil);
@@ -47,30 +49,38 @@ begin
   Self.PageControl := PageControl;
   Self.Caption     := TabName;
 
-  // self
-//  self.Align       := TAlign.alClient;
-//  self.Parent      := PageControl;
-//  self.AlignWithMargins := True;
 
   //   Create Panel
   fPanel          := TPanel.Create(self);
   fPanel.Parent   := self;
-//  fpanel.BorderWidth := 5; //Will be removed
-//  fpanel.BorderStyle := bsSingle;
   fPanel.Align    := TAlign.alClient;
   fPanel.AlignWithMargins := True;
+
+  fPanel2          := TPanel.Create(self);
+  fPanel2.Parent   := self;
+  fPanel2.Align    := TAlign.alBottom;
+  fpanel2.Margins.Top := 30;
+  fPanel2.AlignWithMargins := True;
 
 
 //
   // Create Grid
-  fDBGrid         := TDBGrid.Create(fPanel);
-  fDBGrid.Parent  := fPanel;
+  fDBGrid          := TDBGrid.Create(fPanel);
+  fDBGrid.Parent   := fPanel;
   fDbGrid.ReadOnly := True;
 
+  // memo message
+  fMemoMessage          := TMemo.Create(fPanel2);
+  fMemoMessage.Parent   := fPanel2;
+  fMemoMessage.Align    := TAlign.alLeft;
+  fMemoMessage.Anchors  := [TAnchorKind.akLeft, TAnchorKind.akBottom];
+  fMemoMessage.ReadOnly := True;
+
   // memo query
-  fMemoQuery      := Tmemo.Create(fPanel);
-  fMemoQuery.Parent := fPanel;
-  fMemoQuery.Align := TAlign.alBottom;
+  fMemoQuery          := Tmemo.Create(fPanel2);
+  fMemoQuery.Parent   := fPanel2;
+  fMemoQuery.Align    := TAlign.alRight;
+  fMemoQuery.Anchors  := [TAnchorKind.akRight, TAnchorKind.akBottom];
   fMemoQuery.ReadOnly := True;
 
   // Checkbox
@@ -85,7 +95,7 @@ begin
   fQuery.Connection    := Connection;
   fQuery.SQL.Text      := 'Use ' + Database + ';  ' + QueryStr;
   fQuery.Open;
-//  fquery.Connection.Database :=
+
 
   fDataSource.DataSet  := fQuery;
   fDBGrid.DataSource   := fDataSource;
@@ -121,6 +131,8 @@ begin
   fDBGrid.Columns[0].Width := IdColWidth;
   for I := 1 to (fDBGrid.Columns.count -1) do
     fDBGrid.Columns[I].Width := ColWidth;
+
+  fPanel2.Height := self.Height - fPanel.Height;
 
   //height
 end;

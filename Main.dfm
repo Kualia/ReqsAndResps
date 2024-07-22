@@ -2,9 +2,11 @@ object MainForm: TMainForm
   Left = 490
   Top = 166
   Caption = 'MainForm'
-  ClientHeight = 768
-  ClientWidth = 1191
+  ClientHeight = 662
+  ClientWidth = 1100
   Color = clBtnFace
+  Constraints.MinHeight = 700
+  Constraints.MinWidth = 1100
   Font.Charset = TURKISH_CHARSET
   Font.Color = clWindowText
   Font.Height = -16
@@ -17,14 +19,14 @@ object MainForm: TMainForm
     Left = 0
     Top = 0
     Width = 544
-    Height = 768
+    Height = 662
     Align = alLeft
     Caption = 'Panel1'
     TabOrder = 0
-    ExplicitLeft = -1
+    ExplicitHeight = 667
     DesignSize = (
       544
-      768)
+      662)
     object Label1: TLabel
       Left = 8
       Top = 13
@@ -34,10 +36,12 @@ object MainForm: TMainForm
     end
     object LblDBStatus: TLabel
       Left = 8
-      Top = 744
+      Top = 635
       Width = 104
       Height = 19
+      Anchors = [akLeft, akBottom]
       Caption = 'Database: None'
+      ExplicitTop = 640
     end
     object btnExecute: TButton
       Left = 434
@@ -70,12 +74,14 @@ object MainForm: TMainForm
     end
     object Button1: TButton
       Left = 8
-      Top = 632
+      Top = 604
       Width = 81
       Height = 25
+      Anchors = [akLeft, akBottom]
       Caption = 'Connection'
       TabOrder = 3
       OnClick = Button1Click
+      ExplicitTop = 609
     end
     object EdQueryName: TEdit
       Left = 307
@@ -97,51 +103,23 @@ object MainForm: TMainForm
   object Panel2: TPanel
     Left = 544
     Top = 0
-    Width = 647
-    Height = 768
+    Width = 556
+    Height = 662
     Align = alClient
     AutoSize = True
     Caption = 'Panel2'
     TabOrder = 1
-    ExplicitWidth = 643
-    ExplicitHeight = 767
+    ExplicitLeft = 550
+    ExplicitWidth = 587
+    ExplicitHeight = 682
     object PageControl: TPageControl
       Left = 1
       Top = 1
-      Width = 645
-      Height = 766
-      ActivePage = TabSheet1
+      Width = 554
+      Height = 660
       Align = alClient
       TabOrder = 0
       OnMouseDown = PageControlMouseDown
-      ExplicitLeft = 6
-      ExplicitTop = 0
-      object TabSheet1: TTabSheet
-        Caption = 'TabSheet1'
-        object DBGrid: TDBGrid
-          AlignWithMargins = True
-          Left = 0
-          Top = 0
-          Width = 637
-          Height = 530
-          Margins.Left = 0
-          Margins.Top = 0
-          Margins.Right = 0
-          Margins.Bottom = 0
-          Align = alTop
-          Anchors = [akLeft, akTop, akRight, akBottom]
-          Color = clWhite
-          FixedColor = clTeal
-          GradientStartColor = clBackground
-          ReadOnly = True
-          TabOrder = 0
-          TitleFont.Charset = TURKISH_CHARSET
-          TitleFont.Color = clWindowText
-          TitleFont.Height = -16
-          TitleFont.Name = 'Calibri'
-          TitleFont.Style = []
-        end
-      end
     end
   end
 end

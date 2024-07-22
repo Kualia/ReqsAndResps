@@ -11,13 +11,11 @@ uses
 
 type
   TMainForm = class(TForm)
-    DBGrid: TDBGrid;
 
     btnExecute: TButton;
     MemoQueryText: TMemo;
     CBoxDatabases: TComboBox;
     PageControl: TPageControl;
-    TabSheet1: TTabSheet;
     Label1: TLabel;
     Panel1: TPanel;
     Panel2: TPanel;
