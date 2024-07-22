@@ -22,7 +22,6 @@ object MainForm: TMainForm
     Caption = 'Panel1'
     TabOrder = 0
     ExplicitLeft = -1
-    ExplicitHeight = 769
     DesignSize = (
       544
       768)
@@ -33,36 +32,66 @@ object MainForm: TMainForm
       Height = 19
       Caption = 'Query'
     end
+    object LblDBStatus: TLabel
+      Left = 8
+      Top = 744
+      Width = 104
+      Height = 19
+      Caption = 'Database: None'
+    end
     object btnExecute: TButton
-      Left = 440
-      Top = 568
+      Left = 434
+      Top = 577
       Width = 75
       Height = 25
       Anchors = [akTop, akRight]
       Caption = 'Execute'
       TabOrder = 0
       OnClick = btnExecuteClick
-      ExplicitLeft = 326
     end
-    object ComboBox1: TComboBox
-      Left = 289
-      Top = 566
+    object CBoxDatabases: TComboBox
+      Left = 283
+      Top = 576
       Width = 145
       Height = 27
+      Style = csDropDownList
       Anchors = [akTop, akRight]
       TabOrder = 1
-      Text = 'ComboBox1'
-      ExplicitLeft = 175
+      TextHint = 'Database'
     end
     object MemoQueryText: TMemo
       AlignWithMargins = True
       Left = 8
       Top = 38
-      Width = 501
+      Width = 521
       Height = 524
       Anchors = [akLeft, akTop, akRight]
       TabOrder = 2
-      ExplicitWidth = 387
+    end
+    object Button1: TButton
+      Left = 8
+      Top = 632
+      Width = 81
+      Height = 25
+      Caption = 'Connection'
+      TabOrder = 3
+      OnClick = Button1Click
+    end
+    object EdQueryName: TEdit
+      Left = 307
+      Top = 608
+      Width = 121
+      Height = 27
+      TabOrder = 4
+      TextHint = 'Name'
+    end
+    object BtnSaveSQL: TButton
+      Left = 434
+      Top = 609
+      Width = 75
+      Height = 25
+      Caption = 'Save SQL'
+      TabOrder = 5
     end
   end
   object Panel2: TPanel
@@ -74,9 +103,8 @@ object MainForm: TMainForm
     AutoSize = True
     Caption = 'Panel2'
     TabOrder = 1
-    ExplicitLeft = 550
-    ExplicitWidth = 640
-    ExplicitHeight = 769
+    ExplicitWidth = 643
+    ExplicitHeight = 767
     object PageControl: TPageControl
       Left = 1
       Top = 1
@@ -85,10 +113,9 @@ object MainForm: TMainForm
       ActivePage = TabSheet1
       Align = alClient
       TabOrder = 0
+      OnMouseDown = PageControlMouseDown
       ExplicitLeft = 6
-      ExplicitTop = 13
-      ExplicitWidth = 638
-      ExplicitHeight = 641
+      ExplicitTop = 0
       object TabSheet1: TTabSheet
         Caption = 'TabSheet1'
         object DBGrid: TDBGrid
@@ -104,7 +131,6 @@ object MainForm: TMainForm
           Align = alTop
           Anchors = [akLeft, akTop, akRight, akBottom]
           Color = clWhite
-          DataSource = MSDataSource
           FixedColor = clTeal
           GradientStartColor = clBackground
           ReadOnly = True
@@ -114,27 +140,8 @@ object MainForm: TMainForm
           TitleFont.Height = -16
           TitleFont.Name = 'Calibri'
           TitleFont.Style = []
-          OnDblClick = DBGridDblClick
         end
       end
-      object TabSheet2: TTabSheet
-        Caption = 'TabSheet2'
-        ImageIndex = 1
-      end
     end
-  end
-  object MSConnection: TMSConnection
-    Left = 8
-    Top = 736
-  end
-  object MSQuery: TMSQuery
-    Connection = MSConnection
-    Left = 40
-    Top = 736
-  end
-  object MSDataSource: TMSDataSource
-    DataSet = MSQuery
-    Left = 72
-    Top = 736
   end
 end

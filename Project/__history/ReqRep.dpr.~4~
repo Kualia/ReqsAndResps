@@ -1,0 +1,17 @@
+program ReqRep;
+
+uses
+  Vcl.Forms,
+  Main in '..\Main.pas' {MainForm},
+  DataTab in '..\DataTab.pas',
+  DBConnectionForm in '..\DBConnectionForm.pas' {Form1};
+
+{$R *.res}
+
+begin
+  Application.Initialize;
+  Application.MainFormOnTaskbar := True;
+  Application.CreateForm(TMainForm, MainForm);
+  Application.CreateForm(TForm1, Form1);
+  Application.Run;
+end.

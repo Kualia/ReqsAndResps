@@ -1,0 +1,20 @@
+{
+  "Deniz": {
+    "Server": "localhost",
+    "Port": "1433",
+    "User": "Sa",
+    "Password": "Deniz.12345"
+  },
+  "Deniz Local": {
+    "Server": "localhost",
+    "Port": "1433",
+    "User": "Sa",
+    "Password": "Deniz.12345"
+  },
+  "Martı - AdventureWorks": {
+    "Server": "192.168.0.26",
+    "Port": "1433",
+    "User": "stajyer",
+    "Password": "s123"
+  }
+}
