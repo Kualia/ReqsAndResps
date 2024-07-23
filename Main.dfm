@@ -141,11 +141,14 @@ object MainForm: TMainForm
     end
   end
   object OpenDialog1: TOpenDialog
-    Left = 152
+    Left = 144
     Top = 608
   end
   object SaveDialogCsv: TSaveDialog
-    Left = 208
+    DefaultExt = 'csv'
+    Filter = 'Csv|.Csv'
+    FilterIndex = 0
+    Left = 216
     Top = 608
   end
 end

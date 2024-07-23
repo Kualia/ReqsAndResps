@@ -7,7 +7,7 @@ uses
   Winapi.Windows, Winapi.Messages, System.SysUtils, System.Variants, System.Classes, Vcl.Graphics,
   Vcl.Controls, Vcl.Forms, Vcl.Dialogs, Data.DB, Vcl.Grids, Vcl.DBGrids,
   DBAccess, MSAccess, MemDS, Vcl.StdCtrls, Vcl.ExtCtrls, Vcl.ComCtrls,
-  Vcl.DockTabSet, Vcl.Tabs, Data.SqlExpr;
+  Vcl.DockTabSet, Vcl.Tabs, Data.SqlExpr, Vcl.Buttons;
 
 type
   TMainForm = class(TForm)
@@ -36,12 +36,11 @@ type
     procedure ListBoxQueryFilesClick(Sender: TObject);
     procedure BtnSaveSQLClick(Sender: TObject);
   private
-    QueryCount          :Integer;
-    MSConnection        :TMSConnection;
-    DBConnectionForm    :TFormDBConnect;
+    QueryCount           :Integer;
+    MSConnection         :TMSConnection;
+    DBConnectionForm     :TFormDBConnect;
     fSqlFolderPath       :string;
     fServerSavePath      :string;
-    fExportFolderPath    :string;
     procedure ConnectionLost(Sender :TObject);
     procedure Connected(Sender :TObject);
     procedure LoadSQLFolder(); overload;
@@ -75,7 +74,6 @@ begin
     PageControl.ActivePage := NewTab;
 end;
 
-
 procedure TMainForm.BtnSaveSQLClick(Sender: TObject);
 begin
   SaveQuery();
@@ -99,6 +97,8 @@ begin
   MSConnection.AfterConnect    := Connected;
   MSConnection.AfterDisconnect := ConnectionLost;
   QueryCount := 0;
+
+  TDataTab.SaveDialog := SaveDialogCsv;
 
   InitFiles();
   TFormDBConnect.ServerSavePath := fServerSavePath;
@@ -124,13 +124,9 @@ procedure TMainForm.InitFiles();
 begin
   fSqlFolderPath     := ExtractFilePath(Application.ExeName) + 'Queries';
   fServerSavePath    := ExtractFilePath(Application.ExeName) + 'Servers.json';
-  fExportFolderPath  := ExtractFilePath(Application.ExeName) + 'Exports';
 
   if not DirectoryExists(fSqlFolderPath) then
     ForceDirectories(fSqlFolderPath);
-
-  if not DirectoryExists(fExportFolderPath) then
-    ForceDirectories(fExportFolderPath);
 
   if not FileExists(fServerSavePath) then
     TFile.WriteAllText(fServerSavePath, '{}');

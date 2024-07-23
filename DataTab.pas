@@ -3,7 +3,7 @@ unit DataTab;
 interface
 
 uses
-  System.Math, System.Diagnostics,
+  System.Math, System.Diagnostics, System.RegularExpressions,
   Winapi.Windows, Winapi.Messages, System.SysUtils, System.Variants, System.Classes, Vcl.Graphics,
   Vcl.Controls, Vcl.Forms, Vcl.Dialogs, Data.DB, Vcl.Grids, Vcl.DBGrids,
   DBAccess, MSAccess, MemDS, Vcl.StdCtrls, Vcl.ExtCtrls, Vcl.ComCtrls,
@@ -14,23 +14,25 @@ type
   private
     fQuery        :TMSQuery;
     fDataSource   :TMSDataSource;
-//    fDataSet      :
 
-    fPanel        :TPanel;
-    fPanel2       :TPanel;
-    fDBGrid       :TDBGrid;
-    fMemoMessage  :TMemo;
-    fMemoQuery    :TMemo;
-    fCBoxReadOnly :TCheckBox;
+    fPanel           :TPanel;
+    fPanel2          :TPanel;
+    fDBGrid          :TDBGrid;
+    fMemoMessage     :TMemo;
+    fMemoQuery       :TMemo;
+    fCBoxReadOnly    :TCheckBox;
+    fBtnExportAsCsv  :TButton;
     procedure SetGridReadonlyProp(Sender :TObject = nil);
     procedure UpdateGridSize(Sender :TObject = nil);
     procedure OpenQuery(Connection :TMSConnection; Database, QueryStr :String);
     procedure Layout();
+    procedure ExportCsv(Sender :TObject = nil);
   public
     constructor Create(QueryStr, TabName :string; PageControl :TPageControl;
                   Connection :TMSConnection; Database :string);
     destructor Destroy(); override;
-  end;
+    class var SaveDialog :TSaveDialog;
+end;
 
 
 implementation
@@ -48,8 +50,6 @@ constructor TDataTab.Create(QueryStr, TabName :string;
                             Database   :String);
 begin
   Inherited Create(PageControl);
-  fDataSource      := TMSDataSource.Create(self);
-  fQuery           := TMSQuery.Create(self);
   Self.PageControl := PageControl;
   Self.Caption     := TabName;
 
@@ -59,7 +59,6 @@ begin
 
 
   UpdateGridSize();
-
 end;
 
 procedure TDataTAb.Layout();
@@ -108,11 +107,64 @@ begin
 
   // Checkbox
   fCBoxReadOnly := TCheckBox.Create(fPanel);
-  fCBoxReadOnly.Parent := fpanel;
+  fCBoxReadOnly.Parent := fPanel;
   fCBoxReadOnly.Align := TAlign.alBottom;
   fCBoxReadOnly.Caption := 'Read only';
   fCBoxReadOnly.Checked := True;
   fCBoxReadOnly.OnClick := SetGridReadonlyProp;
+
+  // Export Btn
+  fBtnExportAsCsv := TButton.Create(fpanel);
+  fBtnExportAsCsv.Parent  := fPanel;
+  fBtnExportAsCsv.Align   := TAlign.alBottom;
+  fBtnExportAsCsv.Caption := 'Export csv';
+  fBtnExportAsCsv.OnClick   := ExportCsv;
+
+
+
+  fPanel.OnResize      := UpdateGridSize;
+end;
+
+procedure TDataTab.ExportCsv(Sender :TObject = nil);
+var
+  CsvFile  :TStringList;
+  Row      :TStringList;
+  i        :Integer;
+  FilePath :String;
+begin
+  SaveDialog.FileName := self.Caption + '.csv';
+  if SaveDialog.Execute then
+    FilePath := SaveDialog.FileName;
+
+  if Trim(FilePath) = '' then Exit;
+  if not Pos('.', FilePath) > 0 then FilePath := FilePath + '.csv';
+  
+  fQuery.First;
+  CsvFile := TStringList.Create();
+  Row     := TStringList.Create();
+  try
+    for i := 0 to fQuery.FieldCount - 1 do
+        Row.Add(fQuery.Fields[i].FieldName);
+
+    CSVFile.Add(Row.CommaText);
+    Row.Clear;
+    fQuery.First;
+    while not fQuery.Eof do
+    begin
+      for i := 0 to fQuery.FieldCount - 1 do
+        Row.Add(fQuery.FieldList.Fields[i].AsString);
+
+      CsvFile.Add(Row.CommaText);
+      Row.Clear();
+      fQuery.Next;
+    end;
+
+    fQuery.First;
+    CSVFile.SaveToFile(FilePath);
+  finally
+    CsvFile.Free;
+    Row.Free
+  end;
 end;
 
 
@@ -156,7 +208,12 @@ end;
 procedure TDataTab.OpenQuery(Connection :TMSConnection; Database, QueryStr :String);
 var
   Timer: TStopwatch;
+  CurrentDataSource :TDataSource;
 begin
+
+  fDataSource      := TMSDataSource.Create(self);
+  fQuery           := TMSQuery.Create(self);
+
   Timer := TStopwatch.StartNew;
   try
     fQuery.Connection := Connection;
@@ -167,10 +224,10 @@ begin
     fMemoMessage.Lines.Add(Format('Elapsed Query Time: %s (ms)', [Timer.ElapsedMilliseconds.ToString]));
     fMemoMessage.Lines.Add(Format('Number of Rows: %d', [fQuery.RecordCount]));
   end;
+  
   fMemoQuery.Lines.Add(QueryStr);
   fDataSource.DataSet  := fQuery;
   fDBGrid.DataSource   := fDataSource;
-  fPanel.OnResize      := UpdateGridSize;
 end;
 
 end.
