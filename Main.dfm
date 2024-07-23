@@ -12,6 +12,7 @@ object MainForm: TMainForm
   Font.Height = -16
   Font.Name = 'Calibri'
   Font.Style = []
+  Menu = MainMenu1
   Position = poDesigned
   OnCreate = FormCreate
   TextHeight = 19
@@ -121,6 +122,7 @@ object MainForm: TMainForm
       Top = 493
       Width = 26
       Height = 28
+      Cancel = True
       Caption = #55357#56785
       TabOrder = 7
       OnClick = BtnDeleteSqlClick
@@ -149,15 +151,47 @@ object MainForm: TMainForm
       ExplicitHeight = 659
     end
   end
-  object OpenDialog1: TOpenDialog
-    Left = 144
-    Top = 608
-  end
   object SaveDialogCsv: TSaveDialog
     DefaultExt = 'csv'
     Filter = 'Csv|.Csv'
     FilterIndex = 0
     Left = 216
+    Top = 608
+  end
+  object MainMenu1: TMainMenu
+    Left = 88
+    Top = 65528
+    object OpenFolder1: TMenuItem
+      Caption = 'File'
+      object MenuItemChangeDirectory: TMenuItem
+        Action = ChangeWorkingDirectory
+        Caption = 'Change Directory'
+      end
+      object MenuItemSave: TMenuItem
+        Action = Save
+      end
+    end
+  end
+  object ActionManager1: TActionManager
+    Left = 152
+    Top = 65528
+    StyleName = 'Platform Default'
+    object ChangeWorkingDirectory: TAction
+      Caption = 'ChangeWorkingDirectory'
+      ShortCut = 16463
+      OnExecute = ChangeWorkingDirectoryExecute
+    end
+    object Save: TAction
+      Caption = 'Save'
+      ShortCut = 16467
+      OnExecute = SaveExecute
+    end
+  end
+  object FileOpenDialog1: TFileOpenDialog
+    FavoriteLinks = <>
+    FileTypes = <>
+    Options = [fdoPickFolders]
+    Left = 144
     Top = 608
   end
 end

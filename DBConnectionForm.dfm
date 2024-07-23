@@ -55,6 +55,7 @@ object FormDBConnect: TFormDBConnect
     Width = 48
     Height = 15
     Caption = 'Database'
+    Enabled = False
   end
   object Label7: TLabel
     Left = 8
@@ -121,6 +122,7 @@ object FormDBConnect: TFormDBConnect
     Top = 133
     Width = 185
     Height = 23
+    Enabled = False
     TabOrder = 6
     Text = 'master'
   end

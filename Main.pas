@@ -7,7 +7,8 @@ uses
   Winapi.Windows, Winapi.Messages, System.SysUtils, System.Variants, System.Classes, Vcl.Graphics,
   Vcl.Controls, Vcl.Forms, Vcl.Dialogs, Data.DB, Vcl.Grids, Vcl.DBGrids,
   DBAccess, MSAccess, MemDS, Vcl.StdCtrls, Vcl.ExtCtrls, Vcl.ComCtrls,
-  Vcl.DockTabSet, Vcl.Tabs, Data.SqlExpr, Vcl.Buttons;
+  Vcl.DockTabSet, Vcl.Tabs, Data.SqlExpr, Vcl.Buttons, Vcl.Menus,
+  Vcl.PlatformDefaultStyleActnCtrls, System.Actions, Vcl.ActnList, Vcl.ActnMan;
 
 type
   TMainForm = class(TForm)
@@ -25,18 +26,27 @@ type
     BtnSaveSQL: TButton;
     ListBoxQueryFiles: TListBox;
     LblFolderPath: TLabel;
-    OpenDialog1: TOpenDialog;
     SaveDialogCsv: TSaveDialog;
     BtnDeleteSql: TButton;
+    MainMenu1: TMainMenu;
+    ActionManager1: TActionManager;
+    OpenFolder1: TMenuItem;
+    MenuItemChangeDirectory: TMenuItem;
+    MenuItemSave: TMenuItem;
+    ChangeWorkingDirectory: TAction;
+    Save: TAction;
+    FileOpenDialog1: TFileOpenDialog;
 
     procedure FormCreate(Sender: TObject);
     procedure btnExecuteClick(Sender: TObject);
-    procedure Button1Click(Sender: TObject);
     procedure PageControlMouseDown(Sender: TObject; Button: TMouseButton;
                                     Shift: TShiftState; X, Y: Integer);
     procedure ListBoxQueryFilesClick(Sender: TObject);
+    procedure Button1Click(Sender: TObject);
     procedure BtnSaveSQLClick(Sender: TObject);
     procedure BtnDeleteSqlClick(Sender: TObject);
+    procedure SaveExecute(Sender: TObject);
+    procedure ChangeWorkingDirectoryExecute(Sender: TObject);
   private
     QueryCount           :Integer;
     MSConnection         :TMSConnection;
@@ -110,7 +120,6 @@ begin
 
   InitFiles();
   TFormDBConnect.ServerSavePath := fServerSavePath;
-  LblFolderPath.Caption         := fSqlFolderPath;
   LoadSQLFolder(fSqlFolderPath);
 
   MemoQueryText.Text := 'SELECT top 10 BusinessEntityID [ID], FirstName, LastName FROM Person.Person ORDER BY [ID]';
@@ -119,6 +128,12 @@ end;
 procedure TMainForm.ConnectionLost(Sender :TObject);
 begin
   LblDBStatus.Caption := Format('Server: %s Status: ', [MSConnection.Server, 'disconnected']);
+end;
+
+procedure TMainForm.ChangeWorkingDirectoryExecute(Sender: TObject);
+begin
+  if FileOpenDialog1.Execute then
+    LoadSQLFolder(FileOpenDialog1.FileName);
 end;
 
 procedure TMainForm.Connected(Sender :TObject);
@@ -151,8 +166,9 @@ var
   Result    :Integer;
 begin
   fSqlFolderPath := Path;
-  ListBoxQueryFiles.Items.Clear();
+  LblFolderPath.Caption := fSqlFolderPath;
 
+  ListBoxQueryFiles.Items.Clear();
   Result := FindFirst(fSqlFolderPath + '\*.sql', faAnyFile, SearchRec);
   try
     while Result = 0 do
@@ -163,6 +179,12 @@ begin
   finally
     FindClose(SearchRec);
   end;
+
+end;
+
+procedure TMainForm.SaveExecute(Sender: TObject);
+begin
+  SaveQuery();
 end;
 
 procedure TMainForm.SaveQuery();
@@ -228,8 +250,12 @@ var
   QueryName,
   FileQuery,
   FileName      :string;
+  i             :Integer;
 begin
-  QueryName := ListBoxQueryFiles.Items[ListBoxQueryFiles.ItemIndex];
+  i := ListBoxQueryFiles.ItemIndex;
+  if i < 0 then Exit;
+  
+  QueryName := ListBoxQueryFiles.Items[i];
   FileName := fSqlFolderPath + '\' + QueryName;
   EdQueryName.Text := QueryName;
 

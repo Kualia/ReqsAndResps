@@ -54,10 +54,7 @@ begin
   Self.Caption     := TabName;
 
   Layout();
-  // Query
   OpenQuery(Connection, Database, QueryStr);
-
-
   UpdateGridSize();
 end;
 
