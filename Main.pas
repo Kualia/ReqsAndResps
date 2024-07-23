@@ -27,6 +27,7 @@ type
     LblFolderPath: TLabel;
     OpenDialog1: TOpenDialog;
     SaveDialogCsv: TSaveDialog;
+    BtnDeleteSql: TButton;
 
     procedure FormCreate(Sender: TObject);
     procedure btnExecuteClick(Sender: TObject);
@@ -35,6 +36,7 @@ type
                                     Shift: TShiftState; X, Y: Integer);
     procedure ListBoxQueryFilesClick(Sender: TObject);
     procedure BtnSaveSQLClick(Sender: TObject);
+    procedure BtnDeleteSqlClick(Sender: TObject);
   private
     QueryCount           :Integer;
     MSConnection         :TMSConnection;
@@ -46,6 +48,7 @@ type
     procedure LoadSQLFolder(); overload;
     procedure LoadSQLFolder(Path :string); overload;
     procedure SaveQuery();
+    procedure DeleteQuery();
     procedure InitFiles();
   public
 
@@ -58,6 +61,11 @@ var
 implementation
 
 {$R *.dfm}
+
+procedure TMainForm.BtnDeleteSqlClick(Sender: TObject);
+begin
+  DeleteQuery();
+end;
 
 procedure TMainForm.btnExecuteClick(Sender: TObject);
 var
@@ -165,10 +173,13 @@ var
   Query     :String;
   Buffer    :TBytes;
 begin
-  Path := fSqlFolderPath + '\' + EdQueryName.Text;
-  if not Path.EndsWith('.sql', True) then Path := Path + '.sql';
-  Query := MemoQueryText.Text;
 
+  Path := Trim(EdQueryName.Text);
+  if Path = '' then Exit;
+  if not Path.EndsWith('.sql', True) then Path := Path + '.sql';
+
+  Path := fSqlFolderPath + '\' + Path;
+  Query := MemoQueryText.Text;
 
   if FileExists(Path) then begin
     Response := MessageDlg('This file already exists, do you want to overwrite it?', mtConfirmation, [mbYes, mbNo], 0);
@@ -182,6 +193,32 @@ begin
     FileStream.Free;
   end;
   LoadSQLFolder;
+end;
+
+procedure TMainForm.DeleteQuery();
+var
+  Path     :String;
+  i        :Integer;
+  Response :Integer;
+  FileName :String;
+begin
+  i := ListBoxQueryFiles.ItemIndex;
+  if i < 0 then Exit;
+  FileName := ListBoxQueryFiles.Items[i];
+  Response := MessageDlg(Format('Are you sure you want to delete %s ?', [FileName]), mtConfirmation,
+                [mbYes, mbNo], 0);
+  if Response = mrNo then Exit;
+
+  Path := fSqlFolderPath + '\' + FileName;
+  try
+    DeleteFile(Path);
+  except
+    on E: Exception do
+      ShowMessage('Error deleting file: ' + E.Message);
+  end;
+
+  ListBoxQueryFiles.Items.Delete(ListBoxQueryFiles.ItemIndex);
+
 end;
 
 procedure TMainForm.ListBoxQueryFilesClick(Sender: TObject);
@@ -198,7 +235,6 @@ begin
 
   FileStream := TFileStream.Create(FileName, fmOpenRead);
   StreamReader := TStreamReader.Create(FileStream, TEncoding.UTF8);
-
   try
     MemoQueryText.Clear;
     MemoQueryText.Lines.LoadFromStream(StreamReader.BaseStream, TEncoding.UTF8);

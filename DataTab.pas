@@ -145,7 +145,6 @@ begin
   try
     for i := 0 to fQuery.FieldCount - 1 do
         Row.Add(fQuery.Fields[i].FieldName);
-
     CSVFile.Add(Row.CommaText);
     Row.Clear;
     fQuery.First;
@@ -153,7 +152,6 @@ begin
     begin
       for i := 0 to fQuery.FieldCount - 1 do
         Row.Add(fQuery.FieldList.Fields[i].AsString);
-
       CsvFile.Add(Row.CommaText);
       Row.Clear();
       fQuery.Next;

@@ -145,7 +145,7 @@ object FormDBConnect: TFormDBConnect
     Top = 266
     Width = 22
     Height = 23
-    Caption = 'X'
+    Caption = #55357#56785
     TabOrder = 9
     OnClick = BtnDeleteServerClick
   end

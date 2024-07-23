@@ -116,6 +116,15 @@ object MainForm: TMainForm
       TabOrder = 6
       OnClick = ListBoxQueryFilesClick
     end
+    object BtnDeleteSql: TButton
+      Left = 247
+      Top = 493
+      Width = 26
+      Height = 28
+      Caption = #55357#56785
+      TabOrder = 7
+      OnClick = BtnDeleteSqlClick
+    end
   end
   object Panel2: TPanel
     Left = 544
