@@ -23,21 +23,30 @@ type
     LblDBStatus: TLabel;
     EdQueryName: TEdit;
     BtnSaveSQL: TButton;
+    ListBoxQueryFiles: TListBox;
+    LblFolderPath: TLabel;
+    OpenDialog1: TOpenDialog;
+    SaveDialogCsv: TSaveDialog;
 
     procedure FormCreate(Sender: TObject);
     procedure btnExecuteClick(Sender: TObject);
     procedure Button1Click(Sender: TObject);
     procedure PageControlMouseDown(Sender: TObject; Button: TMouseButton;
-      Shift: TShiftState; X, Y: Integer);
+                                    Shift: TShiftState; X, Y: Integer);
+    procedure ListBoxQueryFilesClick(Sender: TObject);
+    procedure BtnSaveSQLClick(Sender: TObject);
   private
     QueryCount          :Integer;
     MSConnection        :TMSConnection;
     DBConnectionForm    :TFormDBConnect;
-    SqlFolderPath       :string;
-    ServerSavePath      :string;
-    ExportFolderPath    :string;
+    fSqlFolderPath       :string;
+    fServerSavePath      :string;
+    fExportFolderPath    :string;
     procedure ConnectionLost(Sender :TObject);
     procedure Connected(Sender :TObject);
+    procedure LoadSQLFolder(); overload;
+    procedure LoadSQLFolder(Path :string); overload;
+    procedure SaveQuery();
     procedure InitFiles();
   public
 
@@ -67,6 +76,11 @@ begin
 end;
 
 
+procedure TMainForm.BtnSaveSQLClick(Sender: TObject);
+begin
+  SaveQuery();
+end;
+
 procedure TMainForm.Button1Click(Sender: TObject);
 begin
   try
@@ -87,37 +101,115 @@ begin
   QueryCount := 0;
 
   InitFiles();
-  TFormDBConnect.ServerSavePath := ServerSavePath;
+  TFormDBConnect.ServerSavePath := fServerSavePath;
+  LblFolderPath.Caption         := fSqlFolderPath;
+  LoadSQLFolder(fSqlFolderPath);
 
   MemoQueryText.Text := 'SELECT top 10 BusinessEntityID [ID], FirstName, LastName FROM Person.Person ORDER BY [ID]';
 end;
 
 procedure TMainForm.ConnectionLost(Sender :TObject);
 begin
-  LblDBStatus.Caption := Format('Database: %s Status: ', [MSConnection.Server, 'disconnected']);
+  LblDBStatus.Caption := Format('Server: %s Status: ', [MSConnection.Server, 'disconnected']);
 end;
 
 procedure TMainForm.Connected(Sender :TObject);
 begin
-  LblDBStatus.Caption := Format('Database: %s Status: %s', [MSConnection.Server, 'connected']);
+  LblDBStatus.Caption := Format('Server: %s Status: %s', [MSConnection.Server, 'connected']);
   MSconnection.GetDatabaseNames(CBoxDatabases.Items);
   CBoxDatabases.ItemIndex := 0;
 end;
 
 procedure TMainForm.InitFiles();
 begin
-  SqlFolderPath     := ExtractFilePath(Application.ExeName) + 'Queries';
-  ServerSavePath    := ExtractFilePath(Application.ExeName) + 'Servers.json';
-  ExportFolderPath  := ExtractFilePath(Application.ExeName) + 'Exports';
+  fSqlFolderPath     := ExtractFilePath(Application.ExeName) + 'Queries';
+  fServerSavePath    := ExtractFilePath(Application.ExeName) + 'Servers.json';
+  fExportFolderPath  := ExtractFilePath(Application.ExeName) + 'Exports';
 
-  if not DirectoryExists(SqlFolderPath) then
-    ForceDirectories(SqlFolderPath);
+  if not DirectoryExists(fSqlFolderPath) then
+    ForceDirectories(fSqlFolderPath);
 
-  if not DirectoryExists(ExportFolderPath) then
-    ForceDirectories(ExportFolderPath);
+  if not DirectoryExists(fExportFolderPath) then
+    ForceDirectories(fExportFolderPath);
 
-  if not FileExists(ServerSavePath) then
-    TFile.WriteAllText(ServerSavePath, '{}');
+  if not FileExists(fServerSavePath) then
+    TFile.WriteAllText(fServerSavePath, '{}');
+end;
+
+procedure TMainForm.LoadSQLFolder();
+begin
+  LoadSQLFolder(fSqlFolderPath);
+end;
+
+procedure TMainForm.LoadSQLFolder(Path :String);
+var
+  SearchRec :TSearchRec;
+  Result    :Integer;
+begin
+  fSqlFolderPath := Path;
+  ListBoxQueryFiles.Items.Clear();
+
+  Result := FindFirst(fSqlFolderPath + '\*.sql', faAnyFile, SearchRec);
+  try
+    while Result = 0 do
+    begin
+      ListBoxQueryFiles.Items.Add(SearchRec.Name);
+      Result := FindNext(SearchRec);
+    end;
+  finally
+    FindClose(SearchRec);
+  end;
+end;
+
+procedure TMainForm.SaveQuery();
+var
+  FileStream :TFileStream;
+  Response  :Integer;
+  Path,
+  Query     :String;
+  Buffer    :TBytes;
+begin
+  Path := fSqlFolderPath + '\' + EdQueryName.Text;
+  if not Path.EndsWith('.sql', True) then Path := Path + '.sql';
+  Query := MemoQueryText.Text;
+
+
+  if FileExists(Path) then begin
+    Response := MessageDlg('This file already exists, do you want to overwrite it?', mtConfirmation, [mbYes, mbNo], 0);
+    if Response = mrNo then exit;
+  end;
+  FileStream    := TFileStream.Create(Path, fmCreate);
+  try
+    Buffer := TEncoding.UTF8.GetBytes(Query);
+    FileStream.Write(Buffer, Length(buffer));
+  finally
+    FileStream.Free;
+  end;
+  LoadSQLFolder;
+end;
+
+procedure TMainForm.ListBoxQueryFilesClick(Sender: TObject);
+var
+  FileStream    :TFileStream;
+  StreamReader  :TStreamReader;
+  QueryName,
+  FileQuery,
+  FileName      :string;
+begin
+  QueryName := ListBoxQueryFiles.Items[ListBoxQueryFiles.ItemIndex];
+  FileName := fSqlFolderPath + '\' + QueryName;
+  EdQueryName.Text := QueryName;
+
+  FileStream := TFileStream.Create(FileName, fmOpenRead);
+  StreamReader := TStreamReader.Create(FileStream, TEncoding.UTF8);
+
+  try
+    MemoQueryText.Clear;
+    MemoQueryText.Lines.LoadFromStream(StreamReader.BaseStream, TEncoding.UTF8);
+  finally
+    StreamReader.Free;
+    FileStream.Free;
+  end;
 end;
 
 procedure TMainForm.PageControlMouseDown(Sender: TObject; Button: TMouseButton;

@@ -21,9 +21,9 @@ object MainForm: TMainForm
     Width = 544
     Height = 662
     Align = alLeft
-    Caption = 'Panel1'
+    ShowCaption = False
     TabOrder = 0
-    ExplicitHeight = 667
+    ExplicitHeight = 661
     DesignSize = (
       544
       662)
@@ -42,6 +42,13 @@ object MainForm: TMainForm
       Anchors = [akLeft, akBottom]
       Caption = 'Database: None'
       ExplicitTop = 640
+    end
+    object LblFolderPath: TLabel
+      Left = 8
+      Top = 468
+      Width = 19
+      Height = 19
+      Caption = 'C:\'
     end
     object btnExecute: TButton
       Left = 434
@@ -68,7 +75,7 @@ object MainForm: TMainForm
       Left = 8
       Top = 38
       Width = 521
-      Height = 524
+      Height = 419
       Anchors = [akLeft, akTop, akRight]
       TabOrder = 2
     end
@@ -81,12 +88,12 @@ object MainForm: TMainForm
       Caption = 'Connection'
       TabOrder = 3
       OnClick = Button1Click
-      ExplicitTop = 609
+      ExplicitTop = 603
     end
     object EdQueryName: TEdit
-      Left = 307
+      Left = 264
       Top = 608
-      Width = 121
+      Width = 164
       Height = 27
       TabOrder = 4
       TextHint = 'Name'
@@ -98,6 +105,16 @@ object MainForm: TMainForm
       Height = 25
       Caption = 'Save SQL'
       TabOrder = 5
+      OnClick = BtnSaveSQLClick
+    end
+    object ListBoxQueryFiles: TListBox
+      Left = 8
+      Top = 493
+      Width = 233
+      Height = 97
+      ItemHeight = 19
+      TabOrder = 6
+      OnClick = ListBoxQueryFilesClick
     end
   end
   object Panel2: TPanel
@@ -107,11 +124,10 @@ object MainForm: TMainForm
     Height = 662
     Align = alClient
     AutoSize = True
-    Caption = 'Panel2'
+    ShowCaption = False
     TabOrder = 1
-    ExplicitLeft = 550
-    ExplicitWidth = 587
-    ExplicitHeight = 682
+    ExplicitWidth = 552
+    ExplicitHeight = 661
     object PageControl: TPageControl
       Left = 1
       Top = 1
@@ -120,6 +136,16 @@ object MainForm: TMainForm
       Align = alClient
       TabOrder = 0
       OnMouseDown = PageControlMouseDown
+      ExplicitWidth = 550
+      ExplicitHeight = 659
     end
+  end
+  object OpenDialog1: TOpenDialog
+    Left = 152
+    Top = 608
+  end
+  object SaveDialogCsv: TSaveDialog
+    Left = 208
+    Top = 608
   end
 end
