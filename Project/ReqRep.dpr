@@ -12,6 +12,5 @@ begin
   Application.Initialize;
   Application.MainFormOnTaskbar := True;
   Application.CreateForm(TMainForm, MainForm);
-  Application.CreateForm(TFormDBConnect, FormDBConnect);
   Application.Run;
 end.

@@ -14,36 +14,36 @@ uses
 type
   TMainForm = class(TForm)
 
-    btnExecute        :TButton;
-    MemoQueryText     :TMemo;
-    CBoxDatabases     :TComboBox;
-    PageControl       :TPageControl;
-    Label1            :TLabel;
-    Panel1            :TPanel;
-    Panel2            :TPanel;
-    Button1           :TButton;
-    LblDBStatus       :TLabel;
-    EdQueryName       :TEdit;
-    BtnSaveSQL        :TButton;
-    ListBoxQueryFiles :TListBox;
-    LblFolderPath     :TLabel;
+    btnExecute              :TButton;
+    MemoQueryText           :TMemo;
+    CBoxDatabases           :TComboBox;
+    PageControl             :TPageControl;
+    Label1                  :TLabel;
+    Panel1                  :TPanel;
+    Panel2                  :TPanel;
+    Button1                 :TButton;
+    LblDBStatus             :TLabel;
+    EdQueryName             :TEdit;
+    BtnSaveSQL              :TButton;
+    ListBoxQueryFiles       :TListBox;
+    LblFolderPath           :TLabel;
 
-    BtnDeleteSql      :TButton;
-    MainMenu1         :TMainMenu;
-    OpenFolder1       :TMenuItem;
+    BtnDeleteSql            :TButton;
+    MainMenu1               :TMainMenu;
+    OpenFolder1             :TMenuItem;
     MenuItemChangeDirectory :TMenuItem;
-    MenuItemSave      :TMenuItem;
+    MenuItemSave            :TMenuItem;
 
-    SaveDialogCsv     :TSaveDialog;
-    FileOpenDialog1   :TFileOpenDialog;
+    SaveDialogCsv           :TSaveDialog;
+    FileOpenDialog1         :TFileOpenDialog;
 
-    ActionManager1    :TActionManager;
+    ActionManager1          :TActionManager;
     ChangeWorkingDirectory  :TAction;
-    Save        :TAction;
-    Delete      :TAction;
-    Execute     :TAction;
-    Connection  :TAction;
-    LoadFile    :TAction;
+    Save                    :TAction;
+    Delete                  :TAction;
+    Execute                 :TAction;
+    Connection              :TAction;
+    LoadFile                :TAction;
 
     procedure FormCreate(Sender: TObject);
     procedure PageControlMouseDown(Sender: TObject; Button: TMouseButton;
@@ -61,8 +61,8 @@ type
     DBConnectionForm     :TFormDBConnect;
     fSqlFolderPath       :string;
     fServerSavePath      :string;
-    procedure ConnectionLost(Sender :TObject);
-    procedure Connected(Sender :TObject);
+    procedure OnConnectionLost(Sender :TObject);
+    procedure OnConnected(Sender :TObject);
     procedure LoadSQLFolder(Path :string);
     procedure InitFiles();
   public
@@ -87,7 +87,7 @@ begin
   i := ListBoxQueryFiles.ItemIndex;
   if i < 0 then Exit;
   FileName := ListBoxQueryFiles.Items[i];
-  Response := MessageDlg(Format('Are you sure you want to delete %s ?', [FileName]), mtConfirmation,
+  Response := MessageDlg(Format('Are you sure you want to delete "%s" ?', [FileName]), mtConfirmation,
                 [mbYes, mbNo], 0);
   if Response = mrNo then Exit;
 
@@ -177,8 +177,8 @@ procedure TMainForm.FormCreate(Sender: TObject);
 begin
   MsConnection                 := TMSConnection.Create(self);
   MSConnection.LoginPrompt     := False;
-  MSConnection.AfterConnect    := Connected;
-  MSConnection.AfterDisconnect := ConnectionLost;
+  MSConnection.AfterConnect    := OnConnected;
+  MSConnection.AfterDisconnect := OnConnectionLost;
   QueryCount := 0;
 
   TDataTab.SaveDialog := SaveDialogCsv;
@@ -188,12 +188,12 @@ begin
   LoadSQLFolder(fSqlFolderPath);
 end;
 
-procedure TMainForm.ConnectionLost(Sender :TObject);
+procedure TMainForm.OnConnectionLost(Sender :TObject);
 begin
   LblDBStatus.Caption := Format('Server: %s Status: ', [MSConnection.Server, 'disconnected']);
 end;
 
-procedure TMainForm.Connected(Sender :TObject);
+procedure TMainForm.OnConnected(Sender :TObject);
 begin
   LblDBStatus.Caption := Format('Server: %s Status: %s', [MSConnection.Server, 'connected']);
   MSconnection.GetDatabaseNames(CBoxDatabases.Items);
