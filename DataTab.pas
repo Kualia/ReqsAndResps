@@ -3,18 +3,20 @@ unit DataTab;
 interface
 
 uses
-  System.Math, System.Diagnostics, System.RegularExpressions,
+  System.Math, System.Diagnostics, System.RegularExpressions, System.Actions, Vcl.ActnList, Vcl.ActnMan,
   Winapi.Windows, Winapi.Messages, System.SysUtils, System.Variants, System.Classes, Vcl.Graphics,
-  Vcl.Controls, Vcl.Forms, Vcl.Dialogs, Data.DB, Vcl.Grids, Vcl.DBGrids,
+  Vcl.Controls, Vcl.Forms, Vcl.Dialogs, Data.DB, DBClient, Vcl.Grids, Vcl.DBGrids,
   DBAccess, MSAccess, MemDS, Vcl.StdCtrls, Vcl.ExtCtrls, Vcl.ComCtrls,
-  Vcl.DockTabSet, Vcl.Tabs;
+  Vcl.DockTabSet, Vcl.Tabs, Datasnap.Provider;
 
 type
   TDataTab = class(TTabSheet)
   private
-    fQuery        :TMSQuery;
-    fDataSource   :TMSDataSource;
+    //Query
+    fQuery           :TMSQuery;
+    fDataSource      :TMSDataSource;
 
+    //Layout
     fPanel           :TPanel;
     fPanel2          :TPanel;
     fDBGrid          :TDBGrid;
@@ -22,6 +24,13 @@ type
     fMemoQuery       :TMemo;
     fCBoxReadOnly    :TCheckBox;
     fBtnExportAsCsv  :TButton;
+
+    //Action
+    ActionManager    :TActionManager;
+    actDeleteRow     :TAction;
+
+    procedure actDeleteRowExecute(Sender :TObject = nil);
+
     procedure SetGridReadonlyProp(Sender :TObject = nil);
     procedure UpdateGridSize(Sender :TObject = nil);
     procedure OpenQuery(Connection :TMSConnection; Database, QueryStr :String);
@@ -50,8 +59,15 @@ constructor TDataTab.Create(QueryStr, TabName :string;
                             Database   :String);
 begin
   Inherited Create(PageControl);
-  Self.PageControl := PageControl;
-  Self.Caption     := TabName;
+  Self.PageControl      := PageControl;
+  Self.Caption          := TabName;
+
+  ActionManager         := TActionManager.Create(self);
+
+  actDeleteRow            := TAction.Create(ActionManager);
+  actDeleteRow.ShortCut   := VK_DELETE;
+  actDeleteRow.OnExecute  := actDeleteRowExecute;
+  actDeleteRow.ExecuteAction(actDeleteRow);
 
   Layout();
   OpenQuery(Connection, Database, QueryStr);
@@ -129,14 +145,16 @@ var
   i        :Integer;
   FilePath :String;
 begin
+  actDeleteRowExecute();
+  exit;
   SaveDialog.FileName := self.Caption + '.csv';
   if SaveDialog.Execute then
     FilePath := SaveDialog.FileName;
 
   if Trim(FilePath) = '' then Exit;
   if not Pos('.', FilePath) > 0 then FilePath := FilePath + '.csv';
-  
-  fQuery.First;
+
+//  dataset.First;
   CsvFile := TStringList.Create();
   Row     := TStringList.Create();
   try
@@ -144,6 +162,7 @@ begin
         Row.Add(fQuery.Fields[i].FieldName);
     CSVFile.Add(Row.CommaText);
     Row.Clear;
+
     fQuery.First;
     while not fQuery.Eof do
     begin
@@ -158,10 +177,9 @@ begin
     CSVFile.SaveToFile(FilePath);
   finally
     CsvFile.Free;
-    Row.Free
+    Row.Free;
   end;
 end;
-
 
 procedure TDataTab.UpdateGridSize(Sender :TObject = nil);
 var
@@ -204,8 +222,9 @@ procedure TDataTab.OpenQuery(Connection :TMSConnection; Database, QueryStr :Stri
 var
   Timer: TStopwatch;
   CurrentDataSource :TDataSource;
-begin
+  DataSetProvider        :TDataSetProvider;
 
+begin
   fDataSource      := TMSDataSource.Create(self);
   fQuery           := TMSQuery.Create(self);
 
@@ -219,10 +238,22 @@ begin
     fMemoMessage.Lines.Add(Format('Elapsed Query Time: %s (ms)', [Timer.ElapsedMilliseconds.ToString]));
     fMemoMessage.Lines.Add(Format('Number of Rows: %d', [fQuery.RecordCount]));
   end;
-  
   fMemoQuery.Lines.Add(QueryStr);
-  fDataSource.DataSet  := fQuery;
+
+  fDataSource.DataSet  := fquery;
   fDBGrid.DataSource   := fDataSource;
+end;
+
+procedure TDataTab.actDeleteRowExecute(Sender :TObject = nil);
+begin
+  try
+    ShowMessage('Trying');
+    fQuery.Delete;
+    ShowMessage('DELETED');
+  except
+    on E: Exception do
+      ShowMessage(E.Message);
+  end;
 end;
 
 end.

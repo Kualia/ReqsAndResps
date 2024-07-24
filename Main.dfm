@@ -24,7 +24,7 @@ object MainForm: TMainForm
     Align = alLeft
     ShowCaption = False
     TabOrder = 0
-    ExplicitHeight = 661
+    ExplicitLeft = -5
     DesignSize = (
       544
       662)
@@ -56,10 +56,9 @@ object MainForm: TMainForm
       Top = 577
       Width = 75
       Height = 25
+      Action = Execute
       Anchors = [akTop, akRight]
-      Caption = 'Execute'
       TabOrder = 0
-      OnClick = btnExecuteClick
     end
     object CBoxDatabases: TComboBox
       Left = 283
@@ -78,6 +77,7 @@ object MainForm: TMainForm
       Width = 521
       Height = 419
       Anchors = [akLeft, akTop, akRight]
+      ScrollBars = ssVertical
       TabOrder = 2
     end
     object Button1: TButton
@@ -85,10 +85,9 @@ object MainForm: TMainForm
       Top = 604
       Width = 81
       Height = 25
+      Action = Connection
       Anchors = [akLeft, akBottom]
-      Caption = 'Connection'
       TabOrder = 3
-      OnClick = Button1Click
       ExplicitTop = 603
     end
     object EdQueryName: TEdit
@@ -101,12 +100,11 @@ object MainForm: TMainForm
     end
     object BtnSaveSQL: TButton
       Left = 434
-      Top = 609
+      Top = 608
       Width = 75
       Height = 25
-      Caption = 'Save SQL'
+      Action = Save
       TabOrder = 5
-      OnClick = BtnSaveSQLClick
     end
     object ListBoxQueryFiles: TListBox
       Left = 8
@@ -122,10 +120,10 @@ object MainForm: TMainForm
       Top = 493
       Width = 26
       Height = 28
+      Action = Delete
       Cancel = True
       Caption = #55357#56785
       TabOrder = 7
-      OnClick = BtnDeleteSqlClick
     end
   end
   object Panel2: TPanel
@@ -159,8 +157,7 @@ object MainForm: TMainForm
     Top = 608
   end
   object MainMenu1: TMainMenu
-    Left = 88
-    Top = 65528
+    Left = 128
     object OpenFolder1: TMenuItem
       Caption = 'File'
       object MenuItemChangeDirectory: TMenuItem
@@ -173,8 +170,7 @@ object MainForm: TMainForm
     end
   end
   object ActionManager1: TActionManager
-    Left = 152
-    Top = 65528
+    Left = 168
     StyleName = 'Platform Default'
     object ChangeWorkingDirectory: TAction
       Caption = 'ChangeWorkingDirectory'
@@ -185,6 +181,23 @@ object MainForm: TMainForm
       Caption = 'Save'
       ShortCut = 16467
       OnExecute = SaveExecute
+    end
+    object Delete: TAction
+      Caption = 'Delete'
+      OnExecute = DeleteExecute
+    end
+    object Execute: TAction
+      Caption = 'Execute'
+      ShortCut = 116
+      OnExecute = ExecuteExecute
+    end
+    object Connection: TAction
+      Caption = 'Connection'
+      OnExecute = ConnectionExecute
+    end
+    object LoadFile: TAction
+      Caption = 'LoadFile'
+      OnExecute = LoadFileExecute
     end
   end
   object FileOpenDialog1: TFileOpenDialog

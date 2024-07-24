@@ -1,1 +1,0 @@
-SELECT top 1000 BusinessEntityID [ID], FirstName, LastName FROM Person.Person ORDER BY [ID]

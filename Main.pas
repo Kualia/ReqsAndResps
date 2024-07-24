@@ -8,45 +8,53 @@ uses
   Vcl.Controls, Vcl.Forms, Vcl.Dialogs, Data.DB, Vcl.Grids, Vcl.DBGrids,
   DBAccess, MSAccess, MemDS, Vcl.StdCtrls, Vcl.ExtCtrls, Vcl.ComCtrls,
   Vcl.DockTabSet, Vcl.Tabs, Data.SqlExpr, Vcl.Buttons, Vcl.Menus,
-  Vcl.PlatformDefaultStyleActnCtrls, System.Actions, Vcl.ActnList, Vcl.ActnMan;
+  Vcl.PlatformDefaultStyleActnCtrls, System.Actions, Vcl.ActnList, Vcl.ActnMan,
+  Datasnap.Provider, DADump, MSDump;
 
 type
   TMainForm = class(TForm)
 
-    btnExecute: TButton;
-    MemoQueryText: TMemo;
-    CBoxDatabases: TComboBox;
-    PageControl: TPageControl;
-    Label1: TLabel;
-    Panel1: TPanel;
-    Panel2: TPanel;
-    Button1: TButton;
-    LblDBStatus: TLabel;
-    EdQueryName: TEdit;
-    BtnSaveSQL: TButton;
-    ListBoxQueryFiles: TListBox;
-    LblFolderPath: TLabel;
-    SaveDialogCsv: TSaveDialog;
-    BtnDeleteSql: TButton;
-    MainMenu1: TMainMenu;
-    ActionManager1: TActionManager;
-    OpenFolder1: TMenuItem;
-    MenuItemChangeDirectory: TMenuItem;
-    MenuItemSave: TMenuItem;
-    ChangeWorkingDirectory: TAction;
-    Save: TAction;
-    FileOpenDialog1: TFileOpenDialog;
+    btnExecute        :TButton;
+    MemoQueryText     :TMemo;
+    CBoxDatabases     :TComboBox;
+    PageControl       :TPageControl;
+    Label1            :TLabel;
+    Panel1            :TPanel;
+    Panel2            :TPanel;
+    Button1           :TButton;
+    LblDBStatus       :TLabel;
+    EdQueryName       :TEdit;
+    BtnSaveSQL        :TButton;
+    ListBoxQueryFiles :TListBox;
+    LblFolderPath     :TLabel;
+
+    BtnDeleteSql      :TButton;
+    MainMenu1         :TMainMenu;
+    OpenFolder1       :TMenuItem;
+    MenuItemChangeDirectory :TMenuItem;
+    MenuItemSave      :TMenuItem;
+
+    SaveDialogCsv     :TSaveDialog;
+    FileOpenDialog1   :TFileOpenDialog;
+
+    ActionManager1    :TActionManager;
+    ChangeWorkingDirectory  :TAction;
+    Save        :TAction;
+    Delete      :TAction;
+    Execute     :TAction;
+    Connection  :TAction;
+    LoadFile    :TAction;
 
     procedure FormCreate(Sender: TObject);
-    procedure btnExecuteClick(Sender: TObject);
     procedure PageControlMouseDown(Sender: TObject; Button: TMouseButton;
                                     Shift: TShiftState; X, Y: Integer);
     procedure ListBoxQueryFilesClick(Sender: TObject);
-    procedure Button1Click(Sender: TObject);
-    procedure BtnSaveSQLClick(Sender: TObject);
-    procedure BtnDeleteSqlClick(Sender: TObject);
     procedure SaveExecute(Sender: TObject);
     procedure ChangeWorkingDirectoryExecute(Sender: TObject);
+    procedure DeleteExecute(Sender: TObject);
+    procedure ExecuteExecute(Sender: TObject);
+    procedure ConnectionExecute(Sender: TObject);
+    procedure LoadFileExecute(Sender: TObject);
   private
     QueryCount           :Integer;
     MSConnection         :TMSConnection;
@@ -55,10 +63,7 @@ type
     fServerSavePath      :string;
     procedure ConnectionLost(Sender :TObject);
     procedure Connected(Sender :TObject);
-    procedure LoadSQLFolder(); overload;
-    procedure LoadSQLFolder(Path :string); overload;
-    procedure SaveQuery();
-    procedure DeleteQuery();
+    procedure LoadSQLFolder(Path :string);
     procedure InitFiles();
   public
 
@@ -72,12 +77,32 @@ implementation
 
 {$R *.dfm}
 
-procedure TMainForm.BtnDeleteSqlClick(Sender: TObject);
+procedure TMainForm.DeleteExecute(Sender: TObject);
+var
+  Path     :String;
+  i        :Integer;
+  Response :Integer;
+  FileName :String;
 begin
-  DeleteQuery();
+  i := ListBoxQueryFiles.ItemIndex;
+  if i < 0 then Exit;
+  FileName := ListBoxQueryFiles.Items[i];
+  Response := MessageDlg(Format('Are you sure you want to delete %s ?', [FileName]), mtConfirmation,
+                [mbYes, mbNo], 0);
+  if Response = mrNo then Exit;
+
+  Path := fSqlFolderPath + '\' + FileName;
+  try
+    DeleteFile(Path);
+  except
+    on E: Exception do
+      ShowMessage('Error deleting file: ' + E.Message);
+  end;
+
+  ListBoxQueryFiles.Items.Delete(ListBoxQueryFiles.ItemIndex);
 end;
 
-procedure TMainForm.btnExecuteClick(Sender: TObject);
+procedure TMainForm.ExecuteExecute(Sender: TObject);
 var
   NewTab :TDataTab;
 begin
@@ -86,18 +111,17 @@ begin
       Exit;
     end;
 
-    QueryCount := QueryCount + 1;
-    NewTab := TDataTab.Create(MemoQueryText.Lines.Text, Format('SQL-%d', [QueryCount]),
+    try
+      NewTab := TDataTab.Create(MemoQueryText.Lines.Text, Format('SQL-%d', [QueryCount]),
                                             PageControl, MSConnection, CBoxDatabases.Text);
-    PageControl.ActivePage := NewTab;
+      PageControl.ActivePage := NewTab;
+      QueryCount := QueryCount + 1;
+    except
+      newTab.Free;
+    end;
 end;
 
-procedure TMainForm.BtnSaveSQLClick(Sender: TObject);
-begin
-  SaveQuery();
-end;
-
-procedure TMainForm.Button1Click(Sender: TObject);
+procedure TMainForm.ConnectionExecute(Sender: TObject);
 begin
   try
     DBconnectionForm            := TFormDBConnect.Create(self);
@@ -108,86 +132,18 @@ begin
   end;
 end;
 
-procedure TMainForm.FormCreate(Sender: TObject);
-begin
-  MsConnection                 := TMSConnection.Create(self);
-  MSConnection.LoginPrompt     := False;
-  MSConnection.AfterConnect    := Connected;
-  MSConnection.AfterDisconnect := ConnectionLost;
-  QueryCount := 0;
-
-  TDataTab.SaveDialog := SaveDialogCsv;
-
-  InitFiles();
-  TFormDBConnect.ServerSavePath := fServerSavePath;
-  LoadSQLFolder(fSqlFolderPath);
-
-  MemoQueryText.Text := 'SELECT top 10 BusinessEntityID [ID], FirstName, LastName FROM Person.Person ORDER BY [ID]';
-end;
-
-procedure TMainForm.ConnectionLost(Sender :TObject);
-begin
-  LblDBStatus.Caption := Format('Server: %s Status: ', [MSConnection.Server, 'disconnected']);
-end;
-
 procedure TMainForm.ChangeWorkingDirectoryExecute(Sender: TObject);
 begin
   if FileOpenDialog1.Execute then
     LoadSQLFolder(FileOpenDialog1.FileName);
 end;
 
-procedure TMainForm.Connected(Sender :TObject);
-begin
-  LblDBStatus.Caption := Format('Server: %s Status: %s', [MSConnection.Server, 'connected']);
-  MSconnection.GetDatabaseNames(CBoxDatabases.Items);
-  CBoxDatabases.ItemIndex := 0;
-end;
-
-procedure TMainForm.InitFiles();
-begin
-  fSqlFolderPath     := ExtractFilePath(Application.ExeName) + 'Queries';
-  fServerSavePath    := ExtractFilePath(Application.ExeName) + 'Servers.json';
-
-  if not DirectoryExists(fSqlFolderPath) then
-    ForceDirectories(fSqlFolderPath);
-
-  if not FileExists(fServerSavePath) then
-    TFile.WriteAllText(fServerSavePath, '{}');
-end;
-
-procedure TMainForm.LoadSQLFolder();
+procedure TMainForm.LoadFileExecute(Sender: TObject);
 begin
   LoadSQLFolder(fSqlFolderPath);
 end;
 
-procedure TMainForm.LoadSQLFolder(Path :String);
-var
-  SearchRec :TSearchRec;
-  Result    :Integer;
-begin
-  fSqlFolderPath := Path;
-  LblFolderPath.Caption := fSqlFolderPath;
-
-  ListBoxQueryFiles.Items.Clear();
-  Result := FindFirst(fSqlFolderPath + '\*.sql', faAnyFile, SearchRec);
-  try
-    while Result = 0 do
-    begin
-      ListBoxQueryFiles.Items.Add(SearchRec.Name);
-      Result := FindNext(SearchRec);
-    end;
-  finally
-    FindClose(SearchRec);
-  end;
-
-end;
-
 procedure TMainForm.SaveExecute(Sender: TObject);
-begin
-  SaveQuery();
-end;
-
-procedure TMainForm.SaveQuery();
 var
   FileStream :TFileStream;
   Response  :Integer;
@@ -214,33 +170,67 @@ begin
   finally
     FileStream.Free;
   end;
-  LoadSQLFolder;
+  LoadFileExecute(nil);
 end;
 
-procedure TMainForm.DeleteQuery();
-var
-  Path     :String;
-  i        :Integer;
-  Response :Integer;
-  FileName :String;
+procedure TMainForm.FormCreate(Sender: TObject);
 begin
-  i := ListBoxQueryFiles.ItemIndex;
-  if i < 0 then Exit;
-  FileName := ListBoxQueryFiles.Items[i];
-  Response := MessageDlg(Format('Are you sure you want to delete %s ?', [FileName]), mtConfirmation,
-                [mbYes, mbNo], 0);
-  if Response = mrNo then Exit;
+  MsConnection                 := TMSConnection.Create(self);
+  MSConnection.LoginPrompt     := False;
+  MSConnection.AfterConnect    := Connected;
+  MSConnection.AfterDisconnect := ConnectionLost;
+  QueryCount := 0;
 
-  Path := fSqlFolderPath + '\' + FileName;
+  TDataTab.SaveDialog := SaveDialogCsv;
+
+  InitFiles();
+  TFormDBConnect.ServerSavePath := fServerSavePath;
+  LoadSQLFolder(fSqlFolderPath);
+end;
+
+procedure TMainForm.ConnectionLost(Sender :TObject);
+begin
+  LblDBStatus.Caption := Format('Server: %s Status: ', [MSConnection.Server, 'disconnected']);
+end;
+
+procedure TMainForm.Connected(Sender :TObject);
+begin
+  LblDBStatus.Caption := Format('Server: %s Status: %s', [MSConnection.Server, 'connected']);
+  MSconnection.GetDatabaseNames(CBoxDatabases.Items);
+  CBoxDatabases.ItemIndex := 0;
+end;
+
+procedure TMainForm.InitFiles();
+begin
+  fSqlFolderPath     := ExtractFilePath(Application.ExeName) + 'Queries';
+  fServerSavePath    := ExtractFilePath(Application.ExeName) + 'Servers.json';
+
+  if not DirectoryExists(fSqlFolderPath) then
+    ForceDirectories(fSqlFolderPath);
+
+  if not FileExists(fServerSavePath) then
+    TFile.WriteAllText(fServerSavePath, '{}');
+end;
+
+procedure TMainForm.LoadSQLFolder(Path :String);
+var
+  SearchRec :TSearchRec;
+  Result    :Integer;
+begin
+  fSqlFolderPath := Path;
+  LblFolderPath.Caption := fSqlFolderPath;
+
+  ListBoxQueryFiles.Items.Clear();
+  Result := FindFirst(fSqlFolderPath + '\*.sql', faAnyFile, SearchRec);
   try
-    DeleteFile(Path);
-  except
-    on E: Exception do
-      ShowMessage('Error deleting file: ' + E.Message);
+    while Result = 0 do
+    begin
+      ListBoxQueryFiles.Items.Add(SearchRec.Name);
+      Result := FindNext(SearchRec);
+    end;
+  finally
+    FindClose(SearchRec);
   end;
-
-  ListBoxQueryFiles.Items.Delete(ListBoxQueryFiles.ItemIndex);
-
 end;
 
 procedure TMainForm.ListBoxQueryFilesClick(Sender: TObject);
